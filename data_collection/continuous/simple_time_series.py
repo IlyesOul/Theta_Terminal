@@ -2,25 +2,32 @@ import requests
 import json
 import csv
 import datetime
+from data_collection.continuous import conversion_super
 
 
-class time_series_converter:
+class time_series_converter(conversion_super.processor):
 
     # Initializes converter object and fields
-    def __init__(self, url):
-        r = requests.get(url, headers={'User-agent': 'Mozilla/5.0'})
+    def __init__(self):
+        self.url = self.initialize_url()
+        r = requests.get(self.url, headers={'User-agent': 'Mozilla/5.0'})
         self.r_json = r.json()
+        print(self.url)
         self.ticker = self.r_json.get("chart").get("result")[0].get("meta").get("symbol")
 
-    # Writes JSON data to CSV and JSON files
-    def write_to_file(self, file_name_json, file_name_csv):
+    # Writing live data to JSON file
+    def attain_data(self, file="data.json"):
         # Writing to JSON file
-        ticker = ""+self.ticker
-        with open(file_name_json, "w") as outfile:
+        ticker = "" + self.ticker
+        with open(file, "w") as outfile:
             json.dump(self.r_json, outfile)
 
-        with open(file_name_json, encoding='utf-8') as f:
+        with open(file, encoding='utf-8') as f:
             data = json.loads(f.read())
+
+    # Converting JSON data to CSV
+    def convert_data(self, csv_file="data.csv"):
+        ticker = ""+self.ticker
 
         # Converting to CSV dataframe and writing
         header = ["Sticker", "Low", "Close", "High", "Open", "Volume", "Timestamp"]
@@ -54,7 +61,7 @@ class time_series_converter:
             final_arr.append(list_to_add)
 
         # Writing final values to CSV file
-        with open(file_name_csv, 'w') as f:
+        with open(csv_file, 'w') as f:
             csvwriter = csv.writer(f)
             csvwriter.writerow(header)
             for index in range(len(final_arr)):
@@ -82,3 +89,27 @@ class time_series_converter:
             dates.append(date)
 
         return dates
+
+    # Initializes query URL
+    def initialize_url(self):
+        name = input("What is the name of your stock? ")
+        print("This is the starting interval: ")
+        self.prompt_date()
+        unix_1 = self.to_unix()
+        print("This is the ending interval: ")
+        self.prompt_date()
+        unix_2 = self.to_unix()
+
+        return f'https://query1.finance.yahoo.com/v8/finance/chart/{name.lower()}?period1={unix_1}&period2={unix_2}&interval=1d&includeAdjustedClose=false'
+
+    # Prompts user for date-values
+    def prompt_date(self):
+        self.day = int(input("What is the day? (Start with 0 if single-digit) "))
+        self.month = int(input("What is the month? (Start with 0 if single-digit) "))
+        self.year = int(input("What is the year? "))
+
+    # Returns unix_formatted date
+    def to_unix(self):
+        date2 = datetime.datetime(self.year, self.month, self.day)
+        unix_timestamp = datetime.datetime.timestamp(date2)
+        return str(int(unix_timestamp))
