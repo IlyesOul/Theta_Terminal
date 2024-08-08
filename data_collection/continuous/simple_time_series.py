@@ -8,8 +8,11 @@ from data_collection.continuous import conversion_super
 class time_series_converter(conversion_super.processor):
 
     # Initializes converter object and fields
-    def __init__(self):
-        self.url = self.initialize_url()
+    def __init__(self, default=True):
+        if default:
+            self.url = self.initialize_url()
+        else:
+            self.url = self.initialize_url(False, False)
         r = requests.get(self.url, headers={'User-agent': 'Mozilla/5.0'})
         self.r_json = r.json()
         print(self.url)
@@ -91,16 +94,21 @@ class time_series_converter(conversion_super.processor):
         return dates
 
     # Initializes query URL
-    def initialize_url(self):
-        name = input("What is the name of your stock? ")
-        print("This is the starting interval: ")
-        self.prompt_date()
-        unix_1 = self.to_unix()
-        print("This is the ending interval: ")
-        self.prompt_date()
-        unix_2 = self.to_unix()
+    def initialize_url(self, name=True, day1=True, month1=True,year1=2022,day2=True, month2=True,year2=2022):
+        if not name:
+            name = input("What is the name of your stock? ")
+        if not day1:
+            print("This is the starting interval: ")
+            self.prompt_date()
+            unix_1 = self.to_unix()
+            print("This is the ending interval: ")
+            self.prompt_date()
+            unix_2 = self.to_unix()
 
-        return f'https://query1.finance.yahoo.com/v8/finance/chart/{name.lower()}?period1={unix_1}&period2={unix_2}&interval=1d&includeAdjustedClose=false'
+            url = f'https://query1.finance.yahoo.com/v8/finance/chart/msft?period1={unix_1}&period2={unix_2}&interval=1d&includeAdjustedClose=false'
+        else:
+            url = f'https://query1.finance.yahoo.com/v8/finance/chart/msft?period1={str(int(datetime.datetime.timestamp(datetime.datetime(2022,1,1))))}&period2={str(int(datetime.datetime.timestamp(datetime.datetime(2024,8,1))))}&interval=1d&includeAdjustedClose=false'
+        return url
 
     # Prompts user for date-values
     def prompt_date(self):
