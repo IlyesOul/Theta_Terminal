@@ -33,7 +33,7 @@ class time_series_converter(conversion_super.processor):
         ticker = ""+self.ticker
 
         # Converting to CSV dataframe and writing
-        header = ["Sticker", "Low", "Close", "High", "Open", "Volume", "Timestamp"]
+        header = ["Ticker", "Low", "Close", "High", "Open", "Volume", "Timestamp"]
         all_results = self.r_json.get("chart").get("result")[0].get("indicators").get("quote")[0]
 
         full_values = {"low": [],
@@ -121,3 +121,13 @@ class time_series_converter(conversion_super.processor):
         date2 = datetime.datetime(self.year, self.month, self.day)
         unix_timestamp = datetime.datetime.timestamp(date2)
         return str(int(unix_timestamp))
+
+    # Returns valid window ranges
+    def get_valid_dates(self):
+        dates = []
+
+        for unix in self.r_json['chart']['result'][0]['timestamp']:
+            date = datetime.datetime.fromtimestamp(unix)
+            dates.append(date)
+
+        return dates

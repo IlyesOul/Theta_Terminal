@@ -23,3 +23,8 @@ class processor(ABC):
     @abstractmethod
     def prompt_date(self):
         pass
+
+    # Function that obtains dates in range
+    @abstractmethod
+    def get_valid_dates(self):
+        pass

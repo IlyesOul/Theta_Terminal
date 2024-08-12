@@ -15,7 +15,6 @@ prices = data["Open"]
 dates = data["Timestamp"]
 
 for i in range(len(data)):
-    print(type(dates[i]))
     dates[i] = datetime.datetime.fromtimestamp(dates[i])
 
 plt.plot(dates, prices, c='red')

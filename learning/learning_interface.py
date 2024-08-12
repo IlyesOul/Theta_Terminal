@@ -26,7 +26,7 @@ class learning_continuous_class(ABC):
 
     # Function to evaluate and test the model
     @abstractmethod
-    def testing(self):
+    def evaluation(self):
         pass
 
     # Function to assess the given company
