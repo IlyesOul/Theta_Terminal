@@ -1,6 +1,7 @@
 from alpha_vantage.techindicators import TechIndicators
 from alpha_vantage.timeseries import TimeSeries
 import pandas as pd
+from data_collection import continuous
 
 
 # Your Alpha Vantage API Key
