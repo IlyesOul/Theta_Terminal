@@ -106,6 +106,7 @@ class time_series_converter(conversion_super.processor):
             unix_2 = self.to_unix()
 
             url = f'https://query1.finance.yahoo.com/v8/finance/chart/msft?period1={unix_1}&period2={unix_2}&interval=1d&includeAdjustedClose=false'
+            print(url)
         else:
             url = f'https://query1.finance.yahoo.com/v8/finance/chart/msft?period1={str(int(datetime.datetime.timestamp(datetime.datetime(2022,1,1))))}&period2={str(int(datetime.datetime.timestamp(datetime.datetime(2024,8,1))))}&interval=1d&includeAdjustedClose=false'
         return url
