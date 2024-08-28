@@ -1,6 +1,8 @@
 from alpha_vantage.techindicators import TechIndicators
 from alpha_vantage.timeseries import TimeSeries
 import pandas as pd
+from datetime import datetime
+import pytz
 
 # Your Alpha Vantage API Key
 Key = 'I9FDJSQIMYT4TXDX'
