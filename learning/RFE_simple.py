@@ -125,8 +125,8 @@ class rfe_simple(learning_continuous_class):
         dates = self.converter.get_valid_dates()
 
         # Plot predictions and real values
-        plt.plot(dates[int(len(dates)*(2/3)):], np.add(predictions, 100), label="Predictions")
-        plt.plot(dates, real_values, label="Real Values")
+        plt.plot(dates[int(len(dates)*(2/3)):], np.add(predictions, 100), label="Predictions", c='blue')
+        plt.plot(dates, real_values, label="Real Values", c='red')
         plt.title("Real Opening Prices vs Predicted Prices")
         plt.legend()
         plt.show()
