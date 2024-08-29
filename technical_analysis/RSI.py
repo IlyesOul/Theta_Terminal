@@ -5,21 +5,34 @@ import talib as ta
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime as dt
 
-class RSI():
-    self.ticker_symbol='AAPL'
-    data=yf.download(ticker_symbol,start='2022-01-01',end='2023-01-01')
-    excel_file='C:\\Users\\tmghi\\Theta_Terminal\\technical_analysis\\Stock_Historical_Data.xlsx'
-    data.to_excel(excel_file,sheet_name='Historical Data',engine='openpyxl')
-    print(f'Data exported to {excel_file}')
-    df = pd.read_excel(excel_file)
-    print()
-    # Save to CSV
-    df['RSI_14']=ta.RSI(df['Close'],14)
-    plt.plot(df['RSI_14'])
-    plt.xlabel('Date')
-    plt.ylabel('RSI Values')
-    plt.show()
+class RSI_Indicator():
 
-if __name__ in __main__:
+    def __init__(self,symbol,time_period, interval, series_type):
+        self.ticker_symbol=symbol
+        self.time=time_period
+        self.inter=interval
+        self.series=series_type
+        self.data=yf.download(self.ticker_symbol,start='2022-01-01',end='2023-01-01')
+        self.excel_file='C:\\Users\\tmghi\\Theta_Terminal\\technical_analysis\\Stock_Historical_Data.xlsx'
+        self.data.to_excel(self.excel_file,sheet_name='Historical Data',engine='openpyxl')
+    
+        
+    def load_data(self):
+        print(f'Data exported to {self.excel_file}')
+        self.data = pd.read_excel(self.excel_file)
+        self.data['RSI_14']=ta.RSI(self.data['Close'],self.inter)
+        print(self.data)
+        self.graph()
+        
+    def graph(self):
+        plt.plot(self.data['RSI_14'])
+        plt.xlabel('Index')
+        plt.ylabel('RSI Values')
+        plt.show()
+
+if __name__ in '__main__':
+    share=RSI_Indicator('AAPL',100,14,'close')
+    share.load_data()
     
