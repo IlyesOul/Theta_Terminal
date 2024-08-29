@@ -55,6 +55,8 @@ class macd_indicator:
         
     def run(self):
         n = 500
+        call_position = False
+        put_position = False
 
         for i in range(n,-1,-1):
             bullish = False
@@ -62,9 +64,24 @@ class macd_indicator:
 
             if self.stock_price.iloc[i] >= self.ema200_column.iloc[i]:
                 bullish = True
-                
+                if self.macd_list[n-i] < 0 and self.macd_list[n-i] > self.signal_line_list[n-i] and call_position == False and put_position == False:
+                    call_position = True
+                    print('BOUGHT CALL ---------')
+                elif self.macd_list[n-i] > 0 and self.macd_list[n-i] <= self.signal_line_list[n-i] and call_position == True:
+                    call_position = False
+                    print('SOLD CALL -----------')
+                else:
+                    print('HELD')
             else:
                 bearish = True
+                if self.macd_list[n-i] > 0 and self.macd_list[n-i] < self.signal_line_list[n-i] and put_position == False and call_position == False:
+                    put_position = True
+                    print('BOUGHT PUT --------')
+                elif self.macd_list[n-i] < 0 and self.macd_list[n-i] >= self.signal_line_list[n-i] and put_position == True:
+                    put_position = False
+                    print('SOLD PUT ----------')
+                else:
+                    print('HELD')
 
             print(f"date: {self.date_list[n-i]}, ema12: {self.ema12_column.iloc[i]}, ema26: {self.ema26_column.iloc[i]}, stock price: {self.stock_price.iloc[i]},")
 
