@@ -7,7 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime as dt
 import time
-print("i love sniggers")
 interlist=['1m','2m','5m','15m','30m','60m', '90m', '1h', '1d', '5d', '1wk', '1mo', '3mo']
 
 class RSI_Indicator():
